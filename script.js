@@ -1,6 +1,7 @@
 
 
-  var x, y, v ;
+  var x, y, v, z, w, k ;
+  
 
 function setup() {
 	createCanvas(500, 400);
@@ -9,6 +10,14 @@ function setup() {
   y = 200;
   v = 5;
   z= 5;
+  w = 5;
+  k = 5;
+  xk =55;
+  yk =100;
+
+
+
+
  
 }
 
@@ -29,9 +38,24 @@ function draw() {
     z = z * -1;
  }
   
+  ellipse(xk,yk,50,50);
+  xk = xk + w;
+  yk = yk + k;
+
+  
+
+  if(xk <= 0 || xk > 500){
+    w = w * -1;
+  }
+
+ if(yk <= 0 || yk > 400){
+    k = k * -1;
+ }
+
   
 
 
   
 }
 	
+
