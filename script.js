@@ -1,61 +1,104 @@
 
 
-  var x, y, v, z, w, k ;
-  
+var cx, px, cy, py, cv, pv ;
+
+
+class Ball {
+  constructor(x, y, h, w, vx, vy) {
+    this.x = x
+    this.y = y
+    this.h = h
+    this.w = w
+    this.vx = vx
+    this.vy = vy
+  }
+
+  drawBall() {
+    ellipse(this.x, this.y, this.h, this.w);
+    this.x = this.x + this.vx
+    this.y = this.y + this.vy
+
+
+    if (this.x < 0 || this.x > 600) {
+      this.vx = this.vx * -1;
+    }
+
+    if (this.y < 0 || this.y > 400) {
+      this.vy = this.vy * -1;
+    }
+  }
+}
 
 function setup() {
-	createCanvas(500, 400);
+	createCanvas(600, 400)
 
-  x = 55;
-  y = 200;
-  v = 5;
-  z= 5;
-  w = 5;
-  k = 5;
-  xk =55;
-  yk =100;
+  cx = 20;
+  cy = 200;
+  cv = 2;
+  px = 560;
+  py = 200;
+  pv = 2;
 
-
-
-
- 
+  ball1 = new Ball(0, 200, 10, 10, 5, 5)
+  
 }
+
+
+
 
 function draw() {
-	background(225);
-  
-  ellipse(x,y,50,50);
-  x = x + v;
-  y = y + z;
+
+ 
+  background(0);
 
   
+  fill('#ffffff');
+  rect(mouseX, 375, 90, 15);
 
-  if(x <= 0 || x > 500){
-    v = v * -1;
+  
+  move();
+  display();
+  bounce();
+  
+  paddle();
+
+  
+  fill('#d9c3f7');
+  textSize(24);
+  text("Score: " + score, 10, 25);
+  
+  ball1.drawBall();
+}
+
+function move() {
+  this.x += this.vx;
+  this.y += this.vy;
+}
+
+
+function bounce() {
+
+  if (this.x < 10 || this.x > 400 - 10) {
+    this.vx*= -1;
   }
-
- if(y <= 0 || y > 400){
-    z = z * -1;
- }
-  
-  ellipse(xk,yk,50,50);
-  xk = xk + w;
-  yk = yk + k;
-
-  
-
-  if(xk <= 0 || xk > 500){
-    w = w * -1;
+  if (this.y < 10 || this.y > 400 - 10) {
+    this.vy *= -1;
   }
-
- if(yk <= 0 || yk > 400){
-    k = k * -1;
- }
-
-  
+}
 
 
+
+function display() {
+  fill('#d9c3f7');
   
 }
-	
 
+
+function paddle() {
+  if ((this.x > mouseX && this.x < mouseX + 90) &&
+    (this.y + 10 >= 375)) {
+    this.vx *= -1;
+    this.vy *= -1;
+    score++;
+  }
+}
