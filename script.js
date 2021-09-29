@@ -1,40 +1,16 @@
 
 
-var cx, px, cy, py, cv, pv;
-let ball_x = 100;
-let ball_y = 100;
 
 let directionX = 1.5;
 let directionY = 1;
 let paddle_width = 150; 
 let paddle_height = 30;
+let ball_x = 100;
+let ball_y = 100;
+let speed = 3;
 
+var cx, px, cy, py, cv, pv;
 
-class Ball {
-  constructor(x, y, h, w, vx, vy) {
-    this.x = x
-    this.y = y
-    this.h = h
-    this.w = w
-    this.vx = vx
-    this.vy = vy
-  }
-
- drawBall() {
-    ellipse(this.x, this.y, this.h, this.w);
-    this.x = this.x + this.vx
-    this.y = this.y + this.vy
-
-
-    if (this.x < 0 || this.x > 600) {
-      this.vx = this.vx * -1;
-    }
-
-    if (this.y < 0 || this.y > 400) {
-      this.vy = this.vy * -1;
-    }
-  }
-}
 
 function setup() {
 	createCanvas(600, 400)
@@ -46,8 +22,6 @@ function setup() {
   px = 560;
   py = 200;
   pv = 2;
-
-  ball1 = new Ball(0, 300, 20, 20, 5, 5)
 }
 
 function draw() {
@@ -108,5 +82,5 @@ function paddle() {
   }
 
   
-  rect(mouseY, paddle_height / 2, paddle_width, paddle_height);
+  rect(mouseX, paddle_height / 2, paddle_width, paddle_height);
 }
