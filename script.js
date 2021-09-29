@@ -1,6 +1,13 @@
 
 
-var cx, px, cy, py, cv, pv ;
+var cx, px, cy, py, cv, pv;
+let ball_x = 100;
+let ball_y = 100;
+
+let directionX = 1.5;
+let directionY = 1;
+let paddle_width = 150; 
+let paddle_height = 30;
 
 
 class Ball {
@@ -13,7 +20,7 @@ class Ball {
     this.vy = vy
   }
 
-  drawBall() {
+ drawBall() {
     ellipse(this.x, this.y, this.h, this.w);
     this.x = this.x + this.vx
     this.y = this.y + this.vy
@@ -31,6 +38,7 @@ class Ball {
 
 function setup() {
 	createCanvas(600, 400)
+  rectMode(CENTER)
 
   cx = 20;
   cy = 200;
@@ -39,66 +47,66 @@ function setup() {
   py = 200;
   pv = 2;
 
-  ball1 = new Ball(0, 200, 10, 10, 5, 5)
-  
+  ball1 = new Ball(0, 300, 20, 20, 5, 5)
 }
-
-
-
 
 function draw() {
+	background(0);
 
+  let a = color('green')
+  rect(cx, cy, 20, 70);
+  fill(a)
+  cy = cy + cv
  
-  background(0);
 
-  
-  fill('#ffffff');
-  rect(mouseX, 375, 90, 15);
+  if(cy < 0 || cy > 350) {
+   cv = cv * -1;
+  }
 
-  
-  move();
-  display();
-  bounce();
+
+  rect(px, mouseY, 20, 70);
+  fill(a)
+  py = py + pv
+
+  if(py < 0 || py > 350) {
+   pv = pv * -1;
+  }
   
   paddle();
+  ballBounce ();
+  
+  
 
   
-  fill('#d9c3f7');
-  textSize(24);
-  text("Score: " + score, 10, 25);
-  
-  ball1.drawBall();
-}
 
-function move() {
-  this.x += this.vx;
-  this.y += this.vy;
 }
 
 
-function bounce() {
 
-  if (this.x < 10 || this.x > 400 - 10) {
-    this.vx*= -1;
+
+function ballBounce() {
+
+  ellipse(ball_x, ball_y, 20, 20);
+  ball_x += directionX * speed ;
+  ball_y += directionY * speed;
+
+  
+  if (ball_x >= width || ball_x <= 0) {
+    directionX = -directionX
   }
-  if (this.y < 10 || this.y > 400 - 10) {
-    this.vy *= -1;
+  if (ball_y >= height || ball_y <= 0) {
+    directionY = -directionY
   }
 }
-
-
-
-function display() {
-  fill('#d9c3f7');
-  
-}
-
 
 function paddle() {
-  if ((this.x > mouseX && this.x < mouseX + 90) &&
-    (this.y + 10 >= 375)) {
-    this.vx *= -1;
-    this.vy *= -1;
-    score++;
+  if (ball_y < paddle_height &&
+    ball_x > mouseX - paddle_width / 2 &&
+    ball_x < mouseX + paddle_width / 2) {
+    directionY = -directionY
+    
   }
+
+  
+  rect(mouseY, paddle_height / 2, paddle_width, paddle_height);
 }
