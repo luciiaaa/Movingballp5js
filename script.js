@@ -3,8 +3,8 @@
 
 let directionX = 1.5;
 let directionY = 1;
-let paddle_width = 150; 
-let paddle_height = 30;
+let paddle_width = 100; 
+let paddle_height = 35;
 let ball_x = 100;
 let ball_y = 100;
 let speed = 3;
@@ -38,7 +38,7 @@ function draw() {
   }
 
 
-  rect(px, mouseY, 20, 70);
+  rect(mouseX, mouseY, 20, 70);
   fill(a)
   py = py + pv
 
@@ -64,14 +64,18 @@ function ballBounce() {
   ball_x += directionX * speed ;
   ball_y += directionY * speed;
 
-  
-  if (ball_x >= width || ball_x <= 0) {
+   if (ball_x >= width || ball_x <= 0) {
     directionX = -directionX
   }
-  if (ball_y >= height || ball_y <= 0) {
+
+  if(ball_y >= height || ball_y <= 0){
     directionY = -directionY
   }
+ 
+  
 }
+
+  
 
 function paddle() {
   if (ball_y < paddle_height &&
@@ -83,4 +87,5 @@ function paddle() {
 
   
   rect(mouseX, paddle_height / 2, paddle_width, paddle_height);
+ 
 }
