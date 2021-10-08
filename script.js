@@ -3,8 +3,8 @@
 
 let directionX = 1.5;
 let directionY = 1;
-let paddle_width = 100; 
-let paddle_height = 35;
+let paddle_width = 20; 
+let paddle_height = 70;
 let ball_x = 100;
 let ball_y = 100;
 let speed = 3;
@@ -60,7 +60,7 @@ function draw() {
 
 function ballBounce() {
 
-  ellipse(ball_x, ball_y, 20, 20);
+  rect(ball_x, ball_y, 20, 20);
   ball_x += directionX * speed ;
   ball_y += directionY * speed;
 
@@ -68,7 +68,7 @@ function ballBounce() {
     directionX = -directionX
   }
 
-  if(ball_y >= height || ball_y <= 0){
+  if(ball_y >= height || ball_y <= 4){
     directionY = -directionY
   }
  
@@ -80,8 +80,8 @@ function ballBounce() {
 function paddle() {
   if (ball_y < paddle_height &&
     ball_x > mouseX - paddle_width / 2 &&
-    ball_x < mouseX + paddle_width / 2) {
-    directionY = -directionY
+    ball_x < mouseX + paddle_height / 2) {
+    directionX = -directionX
     
   }
 
@@ -89,3 +89,5 @@ function paddle() {
   rect(mouseX, paddle_height / 2, paddle_width, paddle_height);
  
 }
+
+
