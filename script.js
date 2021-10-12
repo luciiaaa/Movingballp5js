@@ -64,7 +64,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(200);
   player1.draw();
   //player2.draw();
 
