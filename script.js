@@ -1,174 +1,108 @@
-var gameState = 0;
-let speed = 3;
-let score = 0
-
-class Ball {
-  constructor(x, y, h, w, vx, vy) {
-    this.x = x
-    this.y = y
-    this.h = h
-    this.w = w
-    this.vx = vx
-    this.vy = vy
-  }
-
-  drawBall() {
-    rect(this.x, this.y, this.h, this.w);
-    this.x = this.x + this.vx
-    this.y = this.y + this.vy
-
-
-    if (this.x < 0 || this.x > width) {
-      this.vx = this.vx * -1;
-    }
-
-    if (this.y < 0 || this.y > height) {
-      this.vy = this.vy * -1;
-    }
-  }
-}
-
-var player1, player2, goal1, goal2
-
-class Player {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.w = 20;
-    this.h = 70;
-    this.vx = 0;
-    this.vy = 0;
-    this.c = "green";
-
-  }
-
-  drawPlayer() {
-    fill(this.c)
-    this.x = mouseX;
-    this.y = mouseY;
-    rect(mouseX, mouseY, this.w, this.h);
-
-
-    if (ball.x < this.x + this.w && ball.x + ball.w > this.x) {
-      if (ball.y < this.y + this.h && ball.y + ball.y > this.y) {
-        ball.vx = ball.vx * -1;
-        score++;
-      }
-    }
-
-  }
-}
-
-class Goal {
-  constructor(x, y, w, h) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.vx = 0;
-    this.vy = 0;
-    this.c = "green";
-
-  }
-
-  drawGoal() {
-    fill(this.c)
-
-    rect(this.x, this.y, this.w, this.h);
-
-    if (ball.x < this.x + this.w && ball.x + ball.w > this.x) {
-      if (ball.y < this.y + this.h && ball.y + ball.y > this.y) {
-        score--;
-        ball.x = width / 2;
-        ball.y = height / 2;
-      }
-    }
-  }
-}
+data = 0
+var instructions = [
+  'Text like you mean it',
+  'Rely heavily on humor',
+  'Use your words',
+  'Take photos of the fun, unique activities you do',
+  'Limit the selfies',
+  'Watch your mouth',
+  'Don’t be creepy',
+  'Keep a firm grasp on reality',
+  'Say goodnight',
+  'Act on mutual interest',
+  'Reaffirm your admiration after an enjoyable date',
+  'Follow up sensual encounters'
+];
 
 function setup() {
-  createCanvas(600, 400);
-  ball = new Ball(100, 300, 20, 20, 5, 5);
-  player1 = new Player(20, 200);
-  //player2 = new Player(550, 20);
-  goal1 = new Goal(0, 150, 20, 150);
-  goal2 = new Goal(580, 150, 20, 150);
+  createCanvas(windowWidth, windowHeight);
+  textSize(40);
+  fill('brown');
+  textAlign(CENTER);
 }
 
 function draw() {
-
-  if (gameState == 0) {
-    menu();
-  }
-
-
-  if (gameState == 1) {
-    game();
-  }
-
-  if (gameState == 2) {
-    background(0)
-    textSize(15)
-    text('druk op rechter muisknop om terug bij menu te komen', 230, 50)
-    textSize(20)
-    text('1. Gebruik je muis om de balk te bewegen. ', 20, 175)
-    text('2. Probeer de bal tegen te houden.', 20, 225)
-    text('Als de bal langs je balk komt heeft de tegenstander een punt.', 20, 275)
-    text('3. Het spel is afgelopen als iemand 10 punten behaald.', 20, 325)
-    if (mouseButton == RIGHT) {
-      gameState = 0
-    }
-  }
+  background(255, 255, 245, 5);
 }
 
-function game() {
+// draw instruct, place in draw
+function drawInstruct() { } // random location
+
+// set interval
+setInterval(drawInstruct, 1000);
+
+// get random instruct
+function drawInstruct() {
+  var instruct = getRandom();
+  text(instruct, random(width), random(height));
+}
+
+function getRandom() {
+  var n = floor(random(0, instructions.length));
+  return instructions[n];
+}
+
+// take out interval, add mousePressed
+function mousePressed() {
+  background(255, 255, 245, 50);
+  var instruct = getRandom();
+  text(instruct, mouseX, mouseY);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////
+///// RANDOM WORDNIK: SCORE (20 mins)
+
+// wordnik base. file > duplicate
+
+// random score
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+
+  print(data);
+
+  textSize(30);
+  stroke(255);
+  fill(255);
+  textAlign(CENTER);
   background(0);
 
-  player1.drawPlayer();
-  ball.drawBall();
-  //ballBounce();
-  //Score
-  fill("white");
-  textSize(24);
-  text("Score: " + score, 10, 25);
-
-  if (mouseButton == RIGHT) {
-    gameState = 0
-  }
-
-  goal1.drawGoal();
-  goal2.drawGoal();
-
-}
-
-function menu() {
-  background(255);
-  b = 'green'
-  fill(b);
-  rect(50, 50, 200, 75);
-  fill(b);
-  rect(50, 200, 200, 75);
-  textSize(30)
-  a = 'white'
-  fill(a);
-  text('start', 70, 96);
-  text('instructions', 70, 246);
-
-
-  if (mouseButton == RIGHT) {
-    gameState = 0;
+  // handle data
+  for (var i in data) {
+    var word = data[i].word;
+    console.log(word);
+    text(word, random(width, random(height)));
   }
 }
 
-function mouseClicked() {
-  if (gameState == 0) {
-    if (mouseX < 200 && mouseX > 50) {
-      if (mouseY < 125 && mouseY > 50) {
-        gameState = 1
-      }
-      if (mouseY < 275 && mouseY > 200) {
-        gameState = 2
-      }
-    }
-  }
+// draw line
+var x = 0;
+var y = 0;
+for (var i in data) {
+  var word = data[i].word;
+  console.log(word);
+  var newX = random(width);
+  var newY = random(height);
+  text(word, newX, newY);
+  line(x, y, newX, newY);
+  x = newX;
+  y = newY;
 }
+
+var x = 0;
+var y = 0;
+
+/////////////////////////////////////////////////////////////////////////////////
+///// RANDOM WORDNIK: CLICK 
+
+function mousePressed() {
+  loadJSON(getVerbsURL, handleResult);
+}
+
+function handleResult(data) {
+  background('cyan');
+  var word = data[0].word;
+  text(word, width / 2, height / 2);
+}
+
+
