@@ -1,108 +1,64 @@
-data = 0
-var instructions = [
-  'Text like you mean it',
-  'Rely heavily on humor',
-  'Use your words',
-  'Take photos of the fun, unique activities you do',
-  'Limit the selfies',
-  'Watch your mouth',
-  'Don’t be creepy',
-  'Keep a firm grasp on reality',
-  'Say goodnight',
-  'Act on mutual interest',
-  'Reaffirm your admiration after an enjoyable date',
-  'Follow up sensual encounters'
-];
 
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  textSize(40);
-  fill('brown');
-  textAlign(CENTER);
+var myGamePiece;
+var myObstacles = [];
+var myScore;
+
+function startGame() {
+  myGamePiece = new component(30, 30, "red", 10, 160);
+  myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+  myGameArea.start();
 }
 
-function draw() {
-  background(255, 255, 245, 5);
-}
-
-// draw instruct, place in draw
-function drawInstruct() { } // random location
-
-// set interval
-setInterval(drawInstruct, 1000);
-
-// get random instruct
-function drawInstruct() {
-  var instruct = getRandom();
-  text(instruct, random(width), random(height));
-}
-
-function getRandom() {
-  var n = floor(random(0, instructions.length));
-  return instructions[n];
-}
-
-// take out interval, add mousePressed
-function mousePressed() {
-  background(255, 255, 245, 50);
-  var instruct = getRandom();
-  text(instruct, mouseX, mouseY);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////
-///// RANDOM WORDNIK: SCORE (20 mins)
-
-// wordnik base. file > duplicate
-
-// random score
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-
-  print(data);
-
-  textSize(30);
-  stroke(255);
-  fill(255);
-  textAlign(CENTER);
-  background(0);
-
-  // handle data
-  for (var i in data) {
-    var word = data[i].word;
-    console.log(word);
-    text(word, random(width, random(height)));
+function component(width, height, color, x, y, type) {
+  this.type = type;
+  this.width = width;
+  this.height = height;
+  this.speedX = 0;
+  this.speedY = 0;
+  this.x = x;
+  this.y = y;
+  this.update = function () {
+    ctx = myGameArea.context;
+    if (this.type == "text") {
+      ctx.font = this.width + " " + this.height;
+      ctx.fillStyle = color;
+      ctx.fillText(this.text, this.x, this.y);
+    } else {
+      ctx.fillStyle = color;
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
   }
 }
 
-// draw line
-var x = 0;
-var y = 0;
-for (var i in data) {
-  var word = data[i].word;
-  console.log(word);
-  var newX = random(width);
-  var newY = random(height);
-  text(word, newX, newY);
-  line(x, y, newX, newY);
-  x = newX;
-  y = newY;
+
+function updateGameArea() {
+  var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+  for (i = 0; i < myObstacles.length; i += 1) {
+    if (myGamePiece.crashWith(myObstacles[i])) {
+      myGameArea.stop();
+      return;
+    }
+  }
+  myGameArea.clear();
+  myGameArea.frameNo += 1;
+  if (myGameArea.frameNo == 1 || everyinterval(150)) {
+    x = myGameArea.canvas.width;
+    minHeight = 20;
+    maxHeight = 200;
+    height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+    minGap = 50;
+    maxGap = 200;
+    gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+    myObstacles.push(new component(10, height, "green", x, 0));
+    myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+  }
+  for (i = 0; i < myObstacles.length; i += 1) {
+    myObstacles[i].speedX = -1;
+    myObstacles[i].newPos();
+    myObstacles[i].update();
+  }
+  myScore.text = "SCORE: " + myGameArea.frameNo;
+  myScore.update();
+  myGamePiece.newPos();
+  myGamePiece.update();
 }
-
-var x = 0;
-var y = 0;
-
-/////////////////////////////////////////////////////////////////////////////////
-///// RANDOM WORDNIK: CLICK 
-
-function mousePressed() {
-  loadJSON(getVerbsURL, handleResult);
-}
-
-function handleResult(data) {
-  background('cyan');
-  var word = data[0].word;
-  text(word, width / 2, height / 2);
-}
-
-
